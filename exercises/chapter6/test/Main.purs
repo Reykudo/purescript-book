@@ -2,7 +2,6 @@ module Test.Main where
 
 import Prelude
 import Test.MySolutions
-import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
 
 import Data.Foldable (foldMap, foldl, foldr)
 import Data.Hashable (hash)
@@ -18,7 +17,6 @@ main =
   runTest do
     runChapterExamples
     {-  Move this block comment starting point to enable more tests
-Note to reader: Delete this line to expand comment block -}
     test "Exercise Group - Show Me" do
       -- Tests for the first exercise in this chapter (Show Shape)
       -- can be found at the end of the previous chapter (chapter 5).
@@ -208,7 +206,6 @@ Note to reader: Delete this line to expand comment block -}
             $ hash
             $ Hour 14
 
-{- Note to reader: Delete this line to expand comment block
 -}
 runChapterExamples :: TestSuite
 runChapterExamples =
