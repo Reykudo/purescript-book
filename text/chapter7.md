@@ -26,7 +26,7 @@ To explain the concept of an _applicative functor_, let's consider the type cons
 The source code for this module defines a function `address` which has the following type:
 
 ```haskell
-address :: String -> String -> String -> Address
+{{#include ../exercises/chapter7/src/Data/AddressBook.purs:address_anno}}
 ```
 
 This function is used to construct a value of type `Address` from three strings: a street name, a city, and a state.
@@ -444,7 +444,7 @@ or with _applicative do_
 {{#include ../exercises/chapter7/src/Data/AddressBook/Validation.purs:validatePerson1Ado}}
 ```
 
-In the first two lines, we use the `nonEmpty` function to validate a non-empty string. `nonEmpty` returns an error (indicated with the `Left` constructor) if its input is empty, or a successful empty value (`unit`) using the `Right` constructor otherwise. We use the sequencing operator `*>` to indicate that we want to perform two validations, returning the result from the validator on the right. In this case, the validator on the right simply uses `pure` to return the input unchanged.
+In the first two lines, we use the `nonEmpty1` function to validate a non-empty string. `nonEmpty1` returns an error indicated with the `Left` constructor if its input is empty, otherwise it returns the value wrapped with the `Right` constructor.
 
 The final lines do not perform any validation but simply provide the `address` and `phones` fields to the `person` function as the remaining arguments.
 
@@ -537,16 +537,16 @@ invalid (["Field 'Number' did not match the required format"])
 
  ## Exercises
 
- 1. (Easy) Write a regular expression `stateRegex :: Regex` to check that a string only contains two alphabetic characters. _Hint_: see the source code for `phoneNumberRegex`.
- 1. (Medium) Write a regular expression `nonEmptyRegex :: Regex` to check that a string is not entirely whitespace. _Hint_: If you need help developing this regex expression, check out [RegExr](https://regexr.com) which has a great cheatsheet and interactive test environment.
+ 1. (Easy) Write a regular expression `stateRegex :: Either String Regex` to check that a string only contains two alphabetic characters. _Hint_: see the source code for `phoneNumberRegex`.
+ 1. (Medium) Write a regular expression `nonEmptyRegex :: Either String Regex` to check that a string is not entirely whitespace. _Hint_: If you need help developing this regex expression, check out [RegExr](https://regexr.com) which has a great cheatsheet and interactive test environment.
  1. (Medium) Write a function `validateAddressImproved` that is similar to `validateAddress`, but uses the above `stateRegex` to validate the `state` field and `nonEmptyRegex` to validate the `street` and `city` fields. _Hint_: see the source for `validatePhoneNumber` for an example of how to use `matches`.
 
 ## Traversable Functors
 
-The remaining validator is `validatePerson`, which combines the validators we have seen so far to validate an entire `Person` structure:
+The remaining validator is `validatePerson`, which combines the validators we have seen so far to validate an entire `Person` structure, including the following new `validatePhoneNumbers` function:
 
 ```haskell
-{{#include ../exercises/chapter7/src/Data/AddressBook/Validation.purs:arrayNonEmpty}}
+{{#include ../exercises/chapter7/src/Data/AddressBook/Validation.purs:validatePhoneNumbers}}
 
 {{#include ../exercises/chapter7/src/Data/AddressBook/Validation.purs:validatePerson}}
 ```
@@ -557,7 +557,7 @@ or with _applicative do_
 {{#include ../exercises/chapter7/src/Data/AddressBook/Validation.purs:validatePersonAdo}}
 ```
 
-There is one more interesting function here, which we haven't seen yet - `traverse`, which appears in the final line.
+`validatePhoneNumbers` uses a new function we haven't seen before - `traverse`.
 
 `traverse` is defined in the `Data.Traversable` module, in the `Traversable` type class:
 
@@ -603,12 +603,12 @@ combineList :: forall f a. Applicative f => List (f a) -> f (List a)
 
 Traversable functors capture the idea of traversing a data structure, collecting a set of effectful computations, and combining their effects. In fact, `sequence` and `traverse` are equally important to the definition of `Traversable` - each can be implemented in terms of each other. This is left as an exercise for the interested reader.
 
-The `Traversable` instance for lists is given in the `Data.List` module. The definition of `traverse` is given here:
+The `Traversable` instance for lists given in the `Data.List` module is:
 
 ```haskell
 instance traversableList :: Traversable List where
 -- traverse :: forall a b m. Applicative m => (a -> m b) -> List a -> m (List b)
-traverse _ Nil = pure Nil
+traverse _ Nil         = pure Nil
 traverse f (Cons x xs) = Cons <$> f x <*> traverse f xs
 ```
 
@@ -638,10 +638,19 @@ These examples show that traversing the `Nothing` value returns `Nothing` with n
 Other traversable functors include `Array`, and `Tuple a` and `Either a` for any type `a`. Generally, most "container" data type constructors have `Traversable` instances. As an example, the exercises will include writing a `Traversable` instance for a type of binary trees.
 
  ## Exercises
+
  1. (Easy) Write `Eq` and `Show` instances for the following binary tree data structure:
 
      ```haskell
      data Tree a = Leaf | Branch (Tree a) a (Tree a)
+     ```
+
+     Recall from the previous chapter that you may either write these instances manually or let the compiler derive them for you.
+
+     There are many "correct" formatting options for `Show` output. The test for this exercise expects the following whitespace style. This happens to match the default formatting of generic show, so you only need to make note of this if you're planning on writing this instance manually.
+
+     ```
+     (Branch (Branch Leaf 8 Leaf) 42 Leaf)
      ```
 
  1. (Medium) Write a `Traversable` instance for `Tree a`, which combines side-effects from left-to-right. _Hint_: There are some additional instance dependencies that need to be defined for `Traversable`.

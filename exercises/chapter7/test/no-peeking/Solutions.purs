@@ -3,8 +3,8 @@ module Test.NoPeeking.Solutions where
 import Prelude
 import Control.Apply (lift2)
 import Data.AddressBook (Address, PhoneNumber, address)
-import Data.AddressBook.Validation (Errors, arrayNonEmpty, matches, nonEmpty, validateAddress, validatePhoneNumber)
-import Data.Either (Either(..))
+import Data.AddressBook.Validation (Errors, matches, nonEmpty, validateAddress, validatePhoneNumbers)
+import Data.Either (Either)
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
@@ -13,7 +13,6 @@ import Data.String.Regex (Regex, regex)
 import Data.String.Regex.Flags (noFlags)
 import Data.Traversable (class Foldable, class Traversable, foldMap, foldl, foldr, sequence, traverse)
 import Data.Validation.Semigroup (V)
-import Partial.Unsafe (unsafePartial)
 
 {-| Exercise Group 1 -}
 -- Exercise 1
@@ -50,24 +49,20 @@ combineMaybe _ = pure Nothing
 
 {-| Exercise Group 2 -}
 -- Exercise 1
-stateRegex :: Regex
-stateRegex =
-  unsafePartial case regex "^[a-zA-Z]{2}$" noFlags of
-    Right r -> r
+stateRegex :: Either String Regex
+stateRegex = regex "^[a-zA-Z]{2}$" noFlags
 
 -- Exercise 2
-nonEmptyRegex :: Regex
-nonEmptyRegex =
-  unsafePartial case regex "[^\\s]$" noFlags of
-    Right r -> r
+nonEmptyRegex :: Either String Regex
+nonEmptyRegex = regex "[^\\s]$" noFlags
 
 -- Exercise 3
 validateAddressImproved :: Address -> V Errors Address
 validateAddressImproved a =
   address
-    <$> (matches "Street" nonEmptyRegex a.street *> pure a.street)
-    <*> (matches "City" nonEmptyRegex a.city *> pure a.city)
-    <*> (matches "State" stateRegex a.state *> pure a.state)
+    <$> matches "Street" nonEmptyRegex a.street
+    <*> matches "City"   nonEmptyRegex a.city
+    <*> matches "State"  stateRegex    a.state
 
 {-| Exercise Group 3 -}
 -- Exercise 1
@@ -75,14 +70,31 @@ data Tree a
   = Leaf
   | Branch (Tree a) a (Tree a)
 
--- These may alternatively be written by hand, rather than derived from generic.
-derive instance genericTree :: Generic (Tree a) _
+-- Solution using derived instances:
 
-instance eqTree :: Eq a => Eq (Tree a) where
-  eq t = genericEq t
+derive instance eqTree :: Eq a => Eq (Tree a)
+
+derive instance genericTree :: Generic (Tree a) _
 
 instance showTree :: Show a => Show (Tree a) where
   show t = genericShow t
+
+{-
+-- Solution using manually-written instances:
+
+instance eqTree :: Eq a => Eq (Tree a) where
+  eq Leaf Leaf = true
+  eq (Branch t1a va t2a) (Branch t1b vb t2b)
+      =  t1a == t1b
+      && va  == vb
+      && t2a == t2b
+  eq _ _ = false
+
+instance showTree :: Show a => Show (Tree a) where
+  show Leaf = "Leaf"
+  show (Branch t1 v t2) =
+    "(Branch " <> show t1 <> " " <> show v <> " " <> show t2 <> ")"
+-}
 
 -- Exercise 2
 instance functorTree :: Functor Tree where
@@ -147,10 +159,10 @@ personOptionalAddress firstName lastName homeAddress phones = { firstName, lastN
 validatePersonOptionalAddress :: PersonOptionalAddress -> V Errors PersonOptionalAddress
 validatePersonOptionalAddress p =
   personOptionalAddress
-    <$> (nonEmpty "First Name" p.firstName *> pure p.firstName)
-    <*> (nonEmpty "Last Name" p.lastName *> pure p.lastName)
-    <*> (traverse validateAddress p.homeAddress *> pure p.homeAddress)
-    <*> (arrayNonEmpty "Phone Numbers" p.phones *> traverse validatePhoneNumber p.phones)
+    <$> nonEmpty "First Name" p.firstName
+    <*> nonEmpty "Last Name" p.lastName
+    <*> traverse validateAddress p.homeAddress
+    <*> validatePhoneNumbers "Phone Numbers" p.phones
 
 -- Exercise 6
 sequenceUsingTraverse :: forall a m t. Traversable t => Applicative m => t (m a) -> m (t a)
