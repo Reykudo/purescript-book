@@ -2,7 +2,6 @@ module Test.Main where
 
 import Prelude
 import Test.MySolutions
-import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
 import Data.AddressBook (AddressBook, Entry, emptyBook, findEntry, insertEntry)
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
@@ -60,8 +59,7 @@ main :: Effect Unit
 main =
   runTest do
     runChapterExamples
-    {-  Move this block comment starting point to enable more tests
-Note to reader: Delete this line to expand comment block -}
+  
     suite "Exercise - findEntryByStreet" do
       test "Lookup existing" do
         Assert.equal (Just john)
@@ -69,6 +67,7 @@ Note to reader: Delete this line to expand comment block -}
       test "Lookup missing" do
         Assert.equal Nothing
           $ findEntryByStreet "456 Nothing St." book
+    
     suite "Exercise - isInBook" do
       test "Check existing" do
         Assert.equal true
@@ -76,12 +75,12 @@ Note to reader: Delete this line to expand comment block -}
       test "Check missing" do
         Assert.equal false
           $ isInBook "unknown" "person" book
+          -- {-  Move this block comment starting point to enable more tests
     test "Exercise - removeDuplicates" do
       Assert.equal book
         $ removeDuplicates bookWithDuplicate
 
-{- Note to reader: Delete this line to expand comment block
--}
+-- -}
 runChapterExamples :: TestSuite
 runChapterExamples = do
   test "Todo for book maintainers - Add tests for chapter examples" do

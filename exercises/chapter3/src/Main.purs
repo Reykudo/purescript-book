@@ -5,8 +5,7 @@ import Prelude
 
 import Data.List (List(..), range)
 import Effect (Effect)
-import Effect.Console (log, logShow)
-
+import Effect.Console (log)
 
 main :: Effect Unit
 main = do

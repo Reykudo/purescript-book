@@ -16,8 +16,8 @@ import Test.Unit.Main (runTest)
 main :: Effect Unit
 main =
   runTest do
-    runChapterExamples
-    {-  Move this block comment starting point to enable more tests
+    -- runChapterExamples
+
     suite "Exercise Group - Recursion" do
       test "Exercise - isEven" do
         assert "0 is even"
@@ -28,6 +28,7 @@ main =
           $ isEven 20
         assertFalse "19 is odd"
           $ isEven 19
+
       suite "Exercise - countEven" do
         test "[] has none" do
           Assert.equal 0
@@ -41,6 +42,7 @@ main =
         test "[0, 1, 19, 20] has 2" do
           Assert.equal 2
             $ countEven [ 0, 1, 19, 20 ]
+                      {-  Move this block comment starting point to enable more tests
     suite "Exercise Group - Maps, Infix Operators, and Filtering" do
       suite "Exercise - squared" do
         test "Do nothing with empty array" do
@@ -64,9 +66,9 @@ main =
         test "keepNonNegativeRewrite " do
           Assert.equal [ 0.0, 2.0, 3.0 ]
             $ keepNonNegativeRewrite [ -1.5, -1.0, 0.0, -0.1, 2.0, 3.0, -4.0 ]
-            Note to reader: Delete this line to expand comment block -}
+            -}
+
     suite "Exercise Group - Flattening, Comprehensions, Do Notation, and Guards" do
-    {--
       test "Exercise - isPrime" do
         assertFalse "0 is not prime"
           $ isPrime 0
@@ -99,6 +101,7 @@ main =
           [ [ "5", "five" ], [ "5", "six" ], [ "6", "five" ], [ "6", "six" ] ]
           [ "5", "6" ]
           [ "five", "six" ]
+
       suite "Exercise - triples" do
         -- Sorting to allow for any ordering
         test "single element array result" do
@@ -109,6 +112,8 @@ main =
           Assert.equal (sort [ [ 3, 4, 5 ], [ 5, 12, 13 ], [ 6, 8, 10 ] ])
             $ sort
             $ triples 13
+
+                             {-  Move this block comment starting point to enable more tests
       suite "Exercise - factorize" do
         test "Test small non-prime number" do
           Assert.equal [ 3, 2 ]
@@ -116,12 +121,15 @@ main =
         test "Test number that uses the prime numbers less than 10" do
           Assert.equal [ 7, 5, 3, 2 ]
             $ factorize 210
+            --}
+
     suite "Exercise Group - Folds and Tail Recursion" do
       test "Exercise - allTrue" do
         assert "all elements true"
           $ allTrue [ true, true, true ]
         assertFalse "some elements false"
           $ allTrue [ true, false, true ]
+      {-  Move this block comment starting point to enable more tests
       suite "Exercise - fibTailRec" do
         test "Verify 0" do
           Assert.equal 1
@@ -132,7 +140,6 @@ main =
         test "Verify 44" do
           Assert.equal 1134903170
             $ fibTailRec 44
-            --}
       suite "Exercise - reverse" do
         test "Empty Array" do
           Assert.equal ([] :: Array Int)
@@ -156,7 +163,6 @@ main =
           ]
           $ map filename
           $ onlyFiles root
-          {-- 
       suite "Exercise - whereIs" do
         test "locates a file"
           $ Assert.equal (Just ("/bin/"))
@@ -182,7 +188,6 @@ main =
         testls "works for a directory with one file" ["/etc/hosts"] oneFileDir
         testls "works for an empty directory" [] emptyDir
 
-{- Note to reader: Delete this line to expand comment block
 -}
 runChapterExamples :: TestSuite
 runChapterExamples =

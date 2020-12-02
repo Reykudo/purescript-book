@@ -18,29 +18,23 @@ nonEmpty1 ""     = Left "Field cannot be empty"
 nonEmpty1 value  = Right value
 -- ANCHOR_END: nonEmpty1
 
--- ANCHOR: validatePerson1
 validatePerson1 :: Person -> Either String Person
 validatePerson1 p =
   person <$> nonEmpty1 p.firstName
          <*> nonEmpty1 p.lastName
          <*> pure p.homeAddress
          <*> pure p.phones
--- ANCHOR_END: validatePerson1
 
--- ANCHOR: validatePerson1Ado
 validatePerson1Ado :: Person -> Either String Person
 validatePerson1Ado p = ado
   f <- nonEmpty1 p.firstName
   l <- nonEmpty1 p.lastName
   in person f l p.homeAddress p.phones
--- ANCHOR_END: validatePerson1Ado
 
 -----------------
 
--- ANCHOR: Errors
 type Errors
   = Array String
--- ANCHOR_END: Errors
 
 -- ANCHOR: nonEmpty
 nonEmpty :: String -> String -> V Errors String
@@ -76,7 +70,6 @@ matches _    (Left  error) _     = invalid [ error ]
 matches field _            _     = invalid [ "Field '" <> field <> "' did not match the required format" ]
 -- ANCHOR_END: matches
 
--- ANCHOR: validateAddress
 validateAddress :: Address -> V Errors Address
 validateAddress a =
   address <$> nonEmpty "Street"  a.street
@@ -84,31 +77,25 @@ validateAddress a =
           <*> lengthIs "State" 2 a.state
 -- ANCHOR_END: validateAddress
 
--- ANCHOR: validateAddressAdo
 validateAddressAdo :: Address -> V Errors Address
 validateAddressAdo a = ado
   street <- nonEmpty "Street"  a.street
   city   <- nonEmpty "City"    a.city
   state  <- lengthIs "State" 2 a.state
   in address street city state
--- ANCHOR_END: validateAddressAdo
 
--- ANCHOR: validatePhoneNumber
 validatePhoneNumber :: PhoneNumber -> V Errors PhoneNumber
 validatePhoneNumber pn =
   phoneNumber <$> pure pn."type"
               <*> matches "Number" phoneNumberRegex pn.number
 -- ANCHOR_END: validatePhoneNumber
 
--- ANCHOR: validatePhoneNumberAdo
 validatePhoneNumberAdo :: PhoneNumber -> V Errors PhoneNumber
 validatePhoneNumberAdo pn = ado
   tpe    <- pure pn."type"
   number <- matches "Number" phoneNumberRegex pn.number
   in phoneNumber tpe number
--- ANCHOR_END: validatePhoneNumberAdo
 
--- ANCHOR: validatePerson
 validatePerson :: Person -> V Errors Person
 validatePerson p =
   person <$> nonEmpty "First Name" p.firstName
@@ -117,7 +104,6 @@ validatePerson p =
          <*> validatePhoneNumbers "Phone Numbers" p.phones
 -- ANCHOR_END: validatePerson
 
--- ANCHOR: validatePersonAdo
 validatePersonAdo :: Person -> V Errors Person
 validatePersonAdo p = ado
   firstName <- nonEmpty "First Name" p.firstName
@@ -125,4 +111,3 @@ validatePersonAdo p = ado
   address   <- validateAddress p.homeAddress
   numbers   <- validatePhoneNumbers "Phone Numbers" p.phones
   in person firstName lastName address numbers
--- ANCHOR_END: validatePersonAdo
