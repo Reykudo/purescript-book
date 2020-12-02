@@ -2,7 +2,7 @@ module Test.Main where
 
 import Prelude
 import Test.MySolutions
-import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
+-- import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
 
 import Data.Foldable (foldMap, foldl, foldr)
 import Data.Hashable (hash)
@@ -17,13 +17,13 @@ main :: Effect Unit
 main =
   runTest do
     runChapterExamples
-    {-  Move this block comment starting point to enable more tests
-Note to reader: Delete this line to expand comment block -}
+    
     suite "Exercise Group - Show Me" do
       test "Exercise - Show Point" do
         Assert.equal "(1.0, 2.0)"
           $ show
           $ Point {x: 1.0, y: 2.0}
+          
     suite "Exercise Group - Common Type Classes" do
       let cpx real imaginary = Complex {real, imaginary}
       suite "Exercise - Show Complex" do
@@ -50,10 +50,12 @@ Note to reader: Delete this line to expand comment block -}
         test "multiply" do
           Assert.equal (cpx (-5.0) 10.0)
             $ mul (cpx 1.0 2.0) (cpx 3.0 4.0)
+            
       suite "Exercise - Ring Complex" do
         test "subtract" do
           Assert.equal (cpx 2.0 3.0)
             $ sub (cpx 3.0 5.0) (cpx 1.0 2.0)
+            
       suite "Exercise - Show Shape" do
         test "circle" do
           Assert.equal "(Circle (1.0, 2.0) 3.0)"
@@ -67,6 +69,8 @@ Note to reader: Delete this line to expand comment block -}
         test "text" do
           Assert.equal "(Text (1.0, 2.0) \"Hello\")"
             $ show $ Text (Point {x: 1.0, y: 2.0}) "Hello"
+              
+              {-  Move this block comment starting point to enable more tests
       let
         withDups =
           [ Circle (Point {x: 1.0, y: 2.0}) 3.0

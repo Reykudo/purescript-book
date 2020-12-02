@@ -3,7 +3,6 @@ module Test.Main where
 import Prelude
 import Test.Examples
 import Test.MySolutions
-import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
 import Data.Array (sort)
 import Data.Maybe (Maybe(..))
 import Data.Path (Path(..), filename, root)
@@ -19,7 +18,6 @@ main =
   runTest do
     runChapterExamples
     {-  Move this block comment starting point to enable more tests
-Note to reader: Delete this line to expand comment block -}
     suite "Exercise Group - Recursion" do
       test "Exercise - isEven" do
         assert "0 is even"
@@ -66,7 +64,9 @@ Note to reader: Delete this line to expand comment block -}
         test "keepNonNegativeRewrite " do
           Assert.equal [ 0.0, 2.0, 3.0 ]
             $ keepNonNegativeRewrite [ -1.5, -1.0, 0.0, -0.1, 2.0, 3.0, -4.0 ]
+            Note to reader: Delete this line to expand comment block -}
     suite "Exercise Group - Flattening, Comprehensions, Do Notation, and Guards" do
+    {--
       test "Exercise - isPrime" do
         assertFalse "0 is not prime"
           $ isPrime 0
@@ -132,6 +132,7 @@ Note to reader: Delete this line to expand comment block -}
         test "Verify 44" do
           Assert.equal 1134903170
             $ fibTailRec 44
+            --}
       suite "Exercise - reverse" do
         test "Empty Array" do
           Assert.equal ([] :: Array Int)
@@ -155,6 +156,7 @@ Note to reader: Delete this line to expand comment block -}
           ]
           $ map filename
           $ onlyFiles root
+          {-- 
       suite "Exercise - whereIs" do
         test "locates a file"
           $ Assert.equal (Just ("/bin/"))
