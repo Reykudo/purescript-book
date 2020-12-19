@@ -18,6 +18,10 @@ main =
   runTest do
     runChapterExamples
 
+    test "Exercise Group - Show Me" do
+      -- Tests for the first exercise in this chapter (Show Shape)
+      -- can be found at the end of the previous chapter (chapter 5).
+      Assert.equal true true
     suite "Exercise Group - Show Me" do
       test "Exercise - Show Point" do
         Assert.equal "(1.0, 2.0)"
@@ -67,6 +71,7 @@ main =
           Assert.equal "(Text (1.0, 2.0) \"Hello\")"
             $ show $ Text (Point {x: 1.0, y: 2.0}) "Hello"
               
+              {- Move this block comment starting point to enable more tests
       let
         withDups =
           [ Circle (Point {x: 1.0, y: 2.0}) 3.0

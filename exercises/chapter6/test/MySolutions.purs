@@ -6,6 +6,9 @@ import Prelude
 
 import Data.Array (concat, cons, nub, nubEq)
 import Data.Functor as Functor
+import Data.Show
+import Prelude
+
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Show (genericShow)
 import Data.Newtype (class Newtype, wrap)
