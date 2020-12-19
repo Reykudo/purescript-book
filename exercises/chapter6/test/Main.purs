@@ -66,6 +66,7 @@ main =
         test "text" do
           Assert.equal "(Text (1.0, 2.0) \"Hello\")"
             $ show $ Text (Point {x: 1.0, y: 2.0}) "Hello"
+              
       let
         withDups =
           [ Circle (Point {x: 1.0, y: 2.0}) 3.0
@@ -84,6 +85,7 @@ main =
       test "Exercise - dedupShapesFast" do
         Assert.equal noDups
           $ dedupShapesFast withDups
+          --}
     suite "Exercise Group - Constraints and Dependencies" do
       suite "Exercise - Eq for NonEmpty" do
         test "NonEmpty equals" do
@@ -98,11 +100,13 @@ main =
           Assert.equal (NonEmpty 1 [ 2, 3, 4, 5, 6 ])
             $ NonEmpty 1 [ 2, 3 ]
             <> NonEmpty 4 [ 5, 6 ]
+            
       suite "Exercise - Functor for NonEmpty" do
         test "NonEmpty append" do
           Assert.equal (NonEmpty 10 [ 20, 30 ])
             $ map (_ * 10)
             $ NonEmpty 1 [ 2, 3 ]
+            
       suite "Exercise - Ord for Extended" do
         -- Type annotation necessary to ensure there is an Ord instance for inner type (Int in this case)
         test "Extended compare inf inf" do
@@ -127,6 +131,7 @@ main =
           Assert.equal LT
             $ compare (Finite 5)
             $ Finite 6
+            
       suite "Exercise - Foldable for NonEmpty" do
         test "NonEmpty foldl" do
           Assert.equal 123
@@ -140,6 +145,7 @@ main =
           Assert.equal "123"
             $ foldMap (\x -> show x)
             $ NonEmpty 1 [ 2, 3 ]
+            
       suite "Exercise - Foldable for OneMore" do
         test "OneMore foldl" do
           Assert.equal 123
@@ -153,6 +159,7 @@ main =
           Assert.equal "123"
             $ foldMap (\x -> show x)
             $ OneMore 1 (2 : 3 : Nil)
+            {--
     suite "Exercise Group - More or less than one Type argument" do
       test "Exercise - unsafeMaximum" do
         Assert.equal 42
@@ -251,8 +258,8 @@ main =
             $ Assert.equal (hash $ Hour 1)
             $ hash
             $ Hour 14
+--}
 
--}
 runChapterExamples :: TestSuite
 runChapterExamples =
   test "Todo for book maintainers - Add tests for chapter examples" do
