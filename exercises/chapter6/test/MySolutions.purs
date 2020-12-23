@@ -2,15 +2,17 @@ module Test.MySolutions where
 
 import Data.Foldable
 import Data.Show
-import Prelude
-
-import Data.Array (concat, cons, nub, nubEq)
-import Data.Functor as Functor
 import Data.Show
 import Prelude
+import Prelude
 
+import Data.Array (concat, cons, length, nub, nubBy, nubByEq, nubEq)
+import Data.Functor as Functor
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Show (genericShow)
+import Data.Hashable (class Hashable, hashEqual, hash)
+import Data.Maybe (Maybe(..))
+import Data.Monoid (power)
 import Data.Newtype (class Newtype, wrap)
 
 -- Note to reader: Add your solutions to this file
@@ -105,3 +107,48 @@ dedupShapes :: Array Shape -> Array Shape
 dedupShapes = nubEq
 
 dedupShapesFast = nub
+
+unsafeMaximum :: Partial => Array Int -> Int
+unsafeMaximum arr = case maximum arr of
+  Just m -> m
+
+class Monoid m <= Action m a where
+  act :: m -> a -> a
+
+newtype Multiply = Multiply Int
+
+instance semigroupMultiply :: Semigroup Multiply where
+  append (Multiply n) (Multiply m) = Multiply (n * m)
+
+instance monoidMultiply :: Monoid Multiply where
+  mempty = Multiply 1
+
+instance actionMultiplyInt :: Action Multiply Int where
+  act (Multiply m) a = m*a
+
+instance actionMultiplyString :: Action Multiply String where
+  act (Multiply m) a = power a m
+
+instance actionArray :: Action m a => Action m (Array a) where
+  act ac ar = map (act ac) ar
+
+newtype Self m = Self m
+derive newtype instance selfEq :: Eq a => Eq (Self a)
+derive newtype instance selfShow :: Show a => Show (Self a)
+
+derive newtype instance multiplyEq :: Eq (Multiply)
+derive newtype instance multiplyShow :: Show (Multiply)
+
+instance actSelf :: Monoid m => Action m (Self m) where
+  act m1 (Self m2) = Self (m1 <> m2)
+
+newtype Hour = Hour Int
+
+instance eqHour :: Eq Hour where
+  eq (Hour n) (Hour m) = mod n 12 == mod m 12
+
+arrayHasDuplicates :: forall a. Hashable a => Array a -> Boolean
+arrayHasDuplicates a1 = (length (nubByEq (\a b -> hashEqual a b && a == b ) a1)) /= (length a1)
+
+instance hashableHour :: Hashable Hour where
+  hash (Hour h) = hash (h `mod` 12)

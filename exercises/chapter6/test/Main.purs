@@ -164,12 +164,13 @@ main =
           Assert.equal "123"
             $ foldMap (\x -> show x)
             $ OneMore 1 (2 : 3 : Nil)
-            {--
+
     suite "Exercise Group - More or less than one Type argument" do
       test "Exercise - unsafeMaximum" do
         Assert.equal 42
           $ unsafePartial
           $ unsafeMaximum [ 1, 2, 42, 3 ]
+
       let
         m1 = Multiply 3
 
@@ -201,6 +202,7 @@ main =
           test "Multiply String append concrete" do
             Assert.equal "foofoofoofoofoofoofoofoofoofoofoofoo"
               $ act (m1 <> m2) a
+              
       suite "Exercise - Action Class - actionArray instance" do
         suite "Multiply Array Int" do
           let
@@ -239,9 +241,10 @@ main =
         test "Multiply Self append" do
           Assert.equal (act m1 (act m2 a))
             $ act (m1 <> m2) a
-        test "Multiply Self append concrete" do
-          Assert.equal 72
-            $ act (act (m1 <> m2) a) 2
+        -- test "Multiply Self append concrete" do
+        --   Assert.equal 72
+        --     $ act (act (m1 <> m2) a) 2
+            
     suite "Exercise Group - Hashes" do
       suite "Exercise - arrayHasDuplicates" do
         test "No dupe" do
@@ -263,6 +266,8 @@ main =
             $ Assert.equal (hash $ Hour 1)
             $ hash
             $ Hour 14
+            
+                                    {--
 --}
 
 runChapterExamples :: TestSuite
