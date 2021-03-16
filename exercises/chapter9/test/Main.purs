@@ -1,7 +1,7 @@
 module Test.Main where
 
 import Prelude
-import Test.MySolutions
+-- import Test.MySolutions
 import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
 
 import Data.Array ((..))
@@ -51,8 +51,6 @@ main =
       files <- readdir outDir
       for_ files \f -> unlink $ Path.concat [ outDir, f ]
     runChapterExamples
-    {-  Move this block comment starting point to enable more tests
-Note to reader: Delete this line to expand comment block -}
     test "concatenateFiles" do
       let
         inFoo = Path.concat [ inDir, "foo.txt" ]
@@ -66,6 +64,7 @@ Note to reader: Delete this line to expand comment block -}
       inBarTxt <- readTextFile UTF8 inBar
       outFooBarTxt <- readTextFile UTF8 outFooBar
       Assert.equal (inFooTxt <> inBarTxt) outFooBarTxt
+      
     test "concatenateMany" do
       let
         inFiles = map (\i -> Path.concat [ inDir, "many", "file" <> show i <> ".txt" ]) $ 1 .. 9

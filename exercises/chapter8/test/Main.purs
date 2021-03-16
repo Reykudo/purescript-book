@@ -16,7 +16,6 @@ main :: Effect Unit
 main =
   runTest do
     runChapterExamples
-    {-  Move this block comment starting point to enable more tests
     suite "Exercises Group - Monads and Applicatives" do
       suite "third" do
         test "No elements"
@@ -34,6 +33,7 @@ main =
         test "4 elements"
           $ Assert.equal (Just 4)
           $ third [ 1, 2, 4, 3 ]
+          
       suite "possibleSums" do
         test "[]"
           $ Assert.equal [ 0 ]
@@ -41,6 +41,7 @@ main =
         test "[1, 2, 10]"
           $ Assert.equal [ 0, 1, 2, 3, 10, 11, 12, 13 ]
           $ possibleSums [ 1, 2, 10 ]
+          
       suite "filterM" do
         suite "Array Monad" do
           let
@@ -56,6 +57,8 @@ main =
             $ filterM
                 onlyPositives
                 (2 : (-1) : 4 : Nil)
+                
+    {-  Move this block comment starting point to enable more tests
         suite "Maybe Monad" do
           let
             -- This is an impractical filtering function,
