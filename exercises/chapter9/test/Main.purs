@@ -1,8 +1,8 @@
 module Test.Main where
 
 import Prelude
--- import Test.MySolutions
-import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
+import Test.MySolutions
+-- import Test.NoPeeking.Solutions  -- Note to reader: Delete this line
 
 import Data.Array ((..))
 import Data.Bifunctor (lmap)
@@ -64,7 +64,6 @@ main =
       inBarTxt <- readTextFile UTF8 inBar
       outFooBarTxt <- readTextFile UTF8 outFooBar
       Assert.equal (inFooTxt <> inBarTxt) outFooBarTxt
-      
     test "concatenateMany" do
       let
         inFiles = map (\i -> Path.concat [ inDir, "many", "file" <> show i <> ".txt" ]) $ 1 .. 9
@@ -85,6 +84,7 @@ main =
         absolutePath <- realpath $ Path.concat [ inDir ]
         chars <- countCharacters $ Path.concat [ absolutePath, "foof.txt" ]
         Assert.equal (Left ("ENOENT: no such file or directory, open '" <> absolutePath <> "/foof.txt'")) $ lmap message chars
+        
     test "writeGet" do
       let
         outFile = Path.concat [ outDir, "user.txt" ]
@@ -95,6 +95,8 @@ main =
       actualOutTxt <- readTextFile UTF8 outFile
       expectedOutTxt <- readTextFile UTF8 expectedOutFile
       Assert.equal expectedOutTxt actualOutTxt
+      
+      {--
     test "concatenateManyParallel" do
       let
         inFiles = map (\i -> Path.concat [ inDir, "many", "file" <> show i <> ".txt" ]) $ 1 .. 9
